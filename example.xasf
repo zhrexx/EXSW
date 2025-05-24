@@ -1,0 +1,6 @@
+<!-- main.exml -->
+<window title="Hello EXSW">
+    <label text="Hello, World" style="color: red" />
+    <button id="abc_button">Hello</button>
+</window>
+
