@@ -5,7 +5,7 @@ pub fn EventListener(comptime EventType: type, comptime DataType: type) type {
         const Self = @This();
         const ListenerFn = *const fn (DataType) void;
         const ListenerMap = std.AutoHashMap(EventType, std.ArrayList(ListenerFn));
-        
+
         allocator: std.mem.Allocator,
         listeners: ListenerMap,
 
@@ -48,12 +48,6 @@ pub fn EventListener(comptime EventType: type, comptime DataType: type) type {
             }
         }
 
-        pub fn removeAllListeners(self: *Self, event: EventType) void {
-            if (self.listeners.remove(event)) |entry| {
-                entry.value.deinit();
-            }
-        }
-
         pub fn emit(self: *Self, event: EventType, data: DataType) void {
             if (self.listeners.get(event)) |listeners| {
                 for (listeners.items) |listener| {
@@ -61,10 +55,5 @@ pub fn EventListener(comptime EventType: type, comptime DataType: type) type {
                 }
             }
         }
-
-        pub fn listenerCount(self: *Self, event: EventType) usize {
-            return if (self.listeners.get(event)) |listeners| listeners.items.len else 0;
-        }
     };
 }
-

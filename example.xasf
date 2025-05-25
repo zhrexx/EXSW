@@ -1,6 +1,6 @@
-<!-- main.exml -->
-<window title="Hello EXSW">
+<window title="Hello EXSW" style="background: black;">
     <label text="Hello, World" style="color: red" />
     <button id="abc_button">Hello</button>
+    <checkbox id="sigma" style="font-size: 24;">Hello</checkbox>
 </window>
 

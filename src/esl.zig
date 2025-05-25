@@ -5,8 +5,9 @@ pub const Style = struct {
     font_size: ?i32 = null,
     background: ?[]const u8 = null,
     pos_x: ?i32 = null,
-    pos_y: ?i32 = null, 
-
+    pos_y: ?i32 = null,
+    width: ?i32 = null,
+    height: ?i32 = null,
     allocator: ?std.mem.Allocator = null,
 
     pub fn init(allocator: std.mem.Allocator) Style {
@@ -43,7 +44,7 @@ pub const Parser = struct {
                 self.allocator.free(key);
                 return error.InvalidFormat;
             }
-            self.pos += 1; 
+            self.pos += 1;
             self.skipWhitespace();
 
             const value = try self.parseValue();
@@ -56,7 +57,7 @@ pub const Parser = struct {
                     self.allocator.free(key);
                     return err;
                 };
-                self.allocator.free(value); 
+                self.allocator.free(value);
             } else if (std.mem.eql(u8, key, "background")) {
                 style.background = value;
             } else if (std.mem.eql(u8, key, "pos_x")) {
@@ -65,14 +66,28 @@ pub const Parser = struct {
                     self.allocator.free(key);
                     return err;
                 };
-                self.allocator.free(value); 
+                self.allocator.free(value);
             } else if (std.mem.eql(u8, key, "pos_y")) {
                 style.pos_y = std.fmt.parseInt(i32, value, 10) catch |err| {
                     self.allocator.free(value);
                     self.allocator.free(key);
                     return err;
                 };
-                self.allocator.free(value); 
+                self.allocator.free(value);
+            } else if (std.mem.eql(u8, key, "width")) {
+                style.width = std.fmt.parseInt(i32, value, 10) catch |err| {
+                    self.allocator.free(value);
+                    self.allocator.free(key);
+                    return err;
+                };
+                self.allocator.free(value);
+            } else if (std.mem.eql(u8, key, "height")) {
+                style.height = std.fmt.parseInt(i32, value, 10) catch |err| {
+                    self.allocator.free(value);
+                    self.allocator.free(key);
+                    return err;
+                };
+                self.allocator.free(value);
             } else {
                 self.allocator.free(value);
             }
@@ -80,7 +95,7 @@ pub const Parser = struct {
             self.allocator.free(key);
             self.skipWhitespace();
             if (self.pos < self.content.len and self.content[self.pos] == ';') {
-                self.pos += 1; 
+                self.pos += 1;
             } else if (self.pos < self.content.len) {
                 self.skipWhitespace();
                 if (self.pos < self.content.len) {
